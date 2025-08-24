@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crop Disease Classifier</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Bootstrap (for grid/utilities only) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2ecc71;
+      --secondary: #27ae60;
+      --bg: #f5fbf7;
+      --card: #ffffff;
+      --text: #2d2d2d;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --grad: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    section {
+      padding: 60px 20px;
+    }
+
+    /* Container */
+    .container-custom {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* Hero Layout */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 40px;
+    }
+    @media (max-width: 992px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+    }
+
+    /* Text Card */
+    .text-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e3f9ed;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: clamp(28px, 4vw, 46px);
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .lead {
+      font-size: 1.1rem;
+      color: #5b5b5b;
+      margin-bottom: 28px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary);
+      border: none;
+      padding: 14px 26px;
+      border-radius: 28px;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(46,204,113,.25);
+      transition: all .25s ease;
+      justify-content: center;
+    }
+    .btn-primary:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr;
+      align-content: center;
+    }
+    .feature {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: transform .25s ease;
+    }
+    .feature:hover { transform: translateY(-3px); }
+    .feature i {
+      color: var(--primary);
+      font-size: 1.6rem;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    .feature strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header>
+    <section class="container-custom hero">
+      
+      <!-- Text / CTA -->
+      <div class="text-card">
+        <h1>Crop Disease Classifier</h1>
+        <p class="lead">Protect your crops with AI-powered disease detection. Upload a leaf photo and get instant insights to act early and boost yields.</p>
+        <a class="btn btn-primary" href="{{ url_for('crop_disease') }}">
+          <i class="fas fa-seedling"></i> Start Detection
+        </a>
+      </div>
+
+      <!-- Features on the Right -->
+      <div class="features">
+        <div class="feature">
+          <i class="fa-solid fa-gauge-high"></i>
+          <div>
+            <strong>Fast Detection</strong>
+            <div>Get predictions in seconds with a clean, simple workflow.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <i class="fa-solid fa-brain"></i>
+          <div>
+            <strong>AI-Powered</strong>
+            <div>Deep learning trained on diverse crop images and diseases.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <i class="fa-solid fa-shield-virus"></i>
+          <div>
+            <strong>High Confidence</strong>
+            <div>Clear scores so you can make decisions with certainty.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <div>
+            <strong>Mobile Friendly</strong>
+            <div>Works beautifully across phones, tablets, and desktops.</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </header>
+
+</body>
+</html>

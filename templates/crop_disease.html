@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Disease Detection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2ecc71;
+      --secondary: #27ae60;
+      --light-bg: #f9fafb;
+      --card-bg: #ffffff;
+      --shadow: rgba(0,0,0,0.1);
+      --gradient: linear-gradient(90deg, #2ecc71, #27ae60);
+    }
+
+    body {
+      background: var(--light-bg);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: stretch; /* 🔑 makes both tiles equal height */
+    }
+
+    @media (max-width: 992px) {
+      .main-container { grid-template-columns: 1fr; }
+    }
+
+    /* Uniform card styles */
+    .card-modern,
+    .media-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 2rem;
+      box-shadow: 0 6px 20px var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .card-modern:hover,
+    .media-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px var(--shadow);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .upload-area {
+      border: 2px dashed var(--primary);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(46, 204, 113, 0.05);
+      margin-bottom: 2rem;
+    }
+    .upload-area:hover {
+      background: rgba(46, 204, 113, 0.1);
+      border-color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    .btn-primary:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    #imagePreview {
+      margin: 1.5rem 0;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px var(--shadow);
+      display: none;
+    }
+    #imagePreview.show { display: block; }
+    #previewImg {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+    }
+
+    /* Media card (right tile) */
+    .media-inner {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      background: #e8f4ed;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .media-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      flex-grow: 1;
+      transition: transform .6s ease, filter .6s ease, opacity .35s ease;
+      opacity: 0;
+    }
+    .media-img.loaded { opacity: 1; }
+    .media-card:hover .media-img { transform: scale(1.05); }
+
+    /* Overlay chips */
+    .chip {
+      position: absolute;
+      top: 14px; left: 14px;
+      display: flex; gap: 8px; flex-wrap: wrap;
+      z-index: 2;
+    }
+    .pill {
+      backdrop-filter: saturate(130%) blur(6px);
+      background: rgba(255,255,255,.8);
+      color: #155b2f;
+      font-weight: 600;
+      font-size: .82rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.06);
+    }
+
+    /* Caption */
+    .caption {
+      position: absolute; inset: auto 0 0 0;
+      padding: 16px 18px 18px;
+      background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
+      color: #fff;
+      display: flex; align-items: end; justify-content: space-between;
+      gap: 14px;
+    }
+    .caption h4 {
+      margin: 0; font-size: 1rem; font-weight: 700;
+    }
+    .caption small { opacity: .9; }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+
+    <!-- Upload Section -->
+    <div class="card-modern">
+      <h1>Crop Disease Detection</h1>
+
+      <form id="uploadForm" action="{{ url_for('upload_image') }}" method="POST" enctype="multipart/form-data">
+        <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+          <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <p class="mb-2">Click or drag to upload your crop image</p>
+          <input type="file" name="image" id="imageUpload" accept="image/*" class="d-none">
+        </div>
+
+        <div id="imagePreview">
+          <img id="previewImg" alt="Uploaded Image Preview">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-search"></i> Analyze Image
+        </button>
+      </form>
+    </div>
+
+    <!-- Info Section -->
+    <div class="media-card">
+      <div class="media-inner">
+        <img
+          class="media-img"
+          src="https://img.freepik.com/premium-photo/front-view-green-leaf-plant-tree-color_974629-197157.jpg"
+          alt="Healthy crop field under sunlight"
+          onload="this.classList.add('loaded')"
+        />
+        <div class="chip">
+          <span class="pill"><i class="fa-solid fa-bolt"></i> Instant</span>
+          <span class="pill"><i class="fa-solid fa-brain"></i> AI-Powered</span>
+          <span class="pill"><i class="fa-solid fa-shield-heart"></i> Accurate</span>
+        </div>
+        <div class="caption">
+          <div>
+            <h4>Upload a clear leaf photo</h4>
+            <small>Best results with natural light & flat angle</small>
+          </div>
+          <i class="fa-solid fa-camera"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const previewImg = document.getElementById('previewImg');
+          previewImg.src = e.target.result;
+          document.getElementById('imagePreview').classList.add('show');
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
