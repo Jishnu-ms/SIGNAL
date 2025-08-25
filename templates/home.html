@@ -76,6 +76,45 @@
     .btn-camera { background: #00796b; }
     .btn-camera:hover { background: #004d40; transform: translateY(-2px); }
 
+    /* Features Card */
+    .features-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e0f2e9;
+    }
+
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .feature:last-child {
+      margin-bottom: 0;
+    }
+
+    .feature i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .feature strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--text);
+    }
+
+    .feature div div {
+      color: #666;
+      line-height: 1.5;
+    }
+
     /* Camera & Preview */
     #cameraStream, #previewImg {
       margin-top: 15px;
@@ -124,11 +163,35 @@
     </div>
 
     <!-- Right: Features -->
-    <div class="features">
-      <div class="feature"><i class="fa-solid fa-gauge-high"></i><div><strong>Fast Detection</strong><div>Get predictions in seconds with a clean, simple workflow.</div></div></div>
-      <div class="feature"><i class="fa-solid fa-brain"></i><div><strong>AI-Powered</strong><div>Deep learning trained on diverse crop images and diseases.</div></div></div>
-      <div class="feature"><i class="fa-solid fa-shield-virus"></i><div><strong>High Confidence</strong><div>Clear scores so you can make decisions with certainty.</div></div></div>
-      <div class="feature"><i class="fa-solid fa-mobile-screen-button"></i><div><strong>Mobile Friendly</strong><div>Works beautifully across phones, tablets, and desktops.</div></div></div>
+    <div class="features-card">
+      <div class="feature">
+        <i class="fa-solid fa-gauge-high"></i>
+        <div>
+          <strong>Fast Detection</strong>
+          <div>Get predictions in seconds with a clean, simple workflow.</div>
+        </div>
+      </div>
+      <div class="feature">
+        <i class="fa-solid fa-brain"></i>
+        <div>
+          <strong>AI-Powered</strong>
+          <div>Deep learning trained on diverse crop images and diseases.</div>
+        </div>
+      </div>
+      <div class="feature">
+        <i class="fa-solid fa-shield-virus"></i>
+        <div>
+          <strong>High Confidence</strong>
+          <div>Clear scores so you can make decisions with certainty.</div>
+        </div>
+      </div>
+      <div class="feature">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <div>
+          <strong>Mobile Friendly</strong>
+          <div>Works beautifully across phones, tablets, and desktops.</div>
+        </div>
+      </div>
     </div>
 
   </section>
