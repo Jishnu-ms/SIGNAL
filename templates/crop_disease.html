@@ -9,12 +9,13 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary: #2ecc71;
-      --secondary: #27ae60;
-      --light-bg: #f9fafb;
+      --primary: #4caf50;       /* Fresh natural green */
+      --secondary: #2e7d32;     /* Deep leaf green */
+      --accent: #8d6e63;        /* Earthy brown */
+      --light-bg: #f4faf6;      /* Leafy light background */
       --card-bg: #ffffff;
       --shadow: rgba(0,0,0,0.1);
-      --gradient: linear-gradient(90deg, #2ecc71, #27ae60);
+      --gradient: linear-gradient(90deg, #66bb6a, #2e7d32);
     }
 
     body {
@@ -22,7 +23,7 @@
       font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 2rem;
-      color: #333;
+      color: #2d2d2d;
     }
 
     .main-container {
@@ -31,14 +32,14 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
-      align-items: stretch; /* 🔑 makes both tiles equal height */
+      align-items: stretch;
     }
 
     @media (max-width: 992px) {
       .main-container { grid-template-columns: 1fr; }
     }
 
-    /* Uniform card styles */
+    /* Card styles */
     .card-modern,
     .media-card {
       background: var(--card-bg);
@@ -49,6 +50,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      border-left: 5px solid var(--primary);
     }
     .card-modern:hover,
     .media-card:hover {
@@ -73,11 +75,11 @@
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
-      background: rgba(46, 204, 113, 0.05);
+      background: rgba(76, 175, 80, 0.05);
       margin-bottom: 2rem;
     }
     .upload-area:hover {
-      background: rgba(46, 204, 113, 0.1);
+      background: rgba(76, 175, 80, 0.1);
       border-color: var(--secondary);
       transform: translateY(-2px);
     }
@@ -121,7 +123,7 @@
       position: relative;
       border-radius: 15px;
       overflow: hidden;
-      background: #e8f4ed;
+      background: #eaf5ed;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
@@ -148,7 +150,7 @@
     .pill {
       backdrop-filter: saturate(130%) blur(6px);
       background: rgba(255,255,255,.8);
-      color: #155b2f;
+      color: var(--secondary);
       font-weight: 600;
       font-size: .82rem;
       padding: 6px 12px;
