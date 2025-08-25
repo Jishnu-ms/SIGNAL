@@ -8,62 +8,41 @@
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <!-- Bootstrap (for grid/utilities only) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
     :root {
-      --primary: #4caf50;   /* Nature Green */
-      --secondary: #2e7d32; /* Deep Leaf Green */
-      --accent: #8d6e63;    /* Earthy Brown */
-      --bg: #f0f8f4;        /* Light leaf background */
-      --card: #ffffff;      /* White card */
+      --primary: #4caf50;
+      --secondary: #2e7d32;
+      --bg: #f0f8f4;
+      --card: #ffffff;
       --text: #2d2d2d;
       --shadow: 0 10px 30px rgba(0,0,0,.08);
       --grad: linear-gradient(135deg, #66bb6a 0%, #2e7d32 100%);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
     }
 
-    section {
-      padding: 60px 20px;
-    }
+    section { padding: 60px 20px; }
+    .container-custom { max-width: 1200px; margin: auto; }
 
-    /* Container */
-    .container-custom {
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    /* Hero Layout */
     .hero {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      align-items: stretch;
       gap: 40px;
     }
-    @media (max-width: 992px) {
-      .hero { grid-template-columns: 1fr; text-align: center; }
-    }
+    @media (max-width: 992px) { .hero { grid-template-columns: 1fr; text-align: center; } }
 
-    /* Text Card */
     .text-card {
       background: var(--card);
       border-radius: 20px;
       padding: 40px;
       box-shadow: var(--shadow);
       border: 1px solid #e0f2e9;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
 
     h1 {
@@ -75,17 +54,12 @@
       margin-bottom: 16px;
     }
 
-    .lead {
-      font-size: 1.1rem;
-      color: #4e4e4e;
-      margin-bottom: 28px;
-    }
+    .lead { font-size: 1.1rem; margin-bottom: 28px; color: #4e4e4e; }
 
-    .btn-primary {
+    .btn-primary, .btn-camera {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: var(--primary);
       border: none;
       padding: 14px 26px;
       border-radius: 28px;
@@ -95,94 +69,128 @@
       box-shadow: 0 8px 24px rgba(46,204,113,.25);
       transition: all .25s ease;
       justify-content: center;
+      cursor: pointer;
     }
-    .btn-primary:hover {
-      background: var(--secondary);
-      transform: translateY(-2px);
-    }
+    .btn-primary { background: var(--primary); margin-right: 10px; }
+    .btn-primary:hover { background: var(--secondary); transform: translateY(-2px); }
+    .btn-camera { background: #00796b; }
+    .btn-camera:hover { background: #004d40; transform: translateY(-2px); }
 
-    /* Features */
-    .features {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: 1fr;
-      align-content: center;
+    /* Camera & Preview */
+    #cameraStream, #previewImg {
+      margin-top: 15px;
+      max-width: 100%;
+      border-radius: 12px;
+      display: none;
     }
-    .feature {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      transition: transform .25s ease;
-      border-left: 5px solid var(--primary);
-    }
-    .feature:hover { transform: translateY(-3px); }
-    .feature i {
-      color: var(--secondary);
-      font-size: 1.6rem;
-      margin-top: 4px;
-      flex-shrink: 0;
-    }
-    .feature strong {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: var(--secondary);
-    }
+    #imagePreview.show { display: block; margin-top: 15px; }
   </style>
 </head>
 <body>
 
   <!-- HERO -->
-  <header>
-    <section class="container-custom hero">
-      
-      <!-- Text / CTA -->
-      <div class="text-card">
-        <h1>Crop Disease Classifier</h1>
-        <p class="lead">Protect your crops with AI-powered disease detection. Upload a leaf photo and get instant insights to act early and boost yields.</p>
-        <a class="btn btn-primary" href="{{ url_for('crop_disease') }}">
-          <i class="fas fa-seedling"></i> Start Detection
-        </a>
+  <section class="container-custom hero">
+
+    <!-- Left: Title & CTA -->
+    <div class="text-card">
+      <h1>Crop Disease Classifier</h1>
+      <p class="lead">Protect your crops with AI-powered disease detection. Upload a leaf photo and get instant insights to act early and boost yields.</p>
+
+      <!-- Existing Button -->
+      <a class="btn-primary" href="{{ url_for('crop_disease') }}">
+        <i class="fas fa-seedling"></i> Start Detection
+      </a>
+
+      <!-- Webcam Buttons -->
+      <button id="openCamera" class="btn-camera">
+        <i class="fas fa-camera"></i> Open Camera
+      </button>
+      <button id="captureBtn" class="btn-primary" style="display:none;">
+        <i class="fas fa-circle"></i> Capture
+      </button>
+
+      <!-- Camera Video -->
+      <video id="cameraStream" autoplay playsinline></video>
+
+      <!-- Preview -->
+      <div id="imagePreview">
+        <img id="previewImg" src="">
       </div>
 
-      <!-- Features on the Right -->
-      <div class="features">
-        <div class="feature">
-          <i class="fa-solid fa-gauge-high"></i>
-          <div>
-            <strong>Fast Detection</strong>
-            <div>Get predictions in seconds with a clean, simple workflow.</div>
-          </div>
-        </div>
-        <div class="feature">
-          <i class="fa-solid fa-brain"></i>
-          <div>
-            <strong>AI-Powered</strong>
-            <div>Deep learning trained on diverse crop images and diseases.</div>
-          </div>
-        </div>
-        <div class="feature">
-          <i class="fa-solid fa-shield-virus"></i>
-          <div>
-            <strong>High Confidence</strong>
-            <div>Clear scores so you can make decisions with certainty.</div>
-          </div>
-        </div>
-        <div class="feature">
-          <i class="fa-solid fa-mobile-screen-button"></i>
-          <div>
-            <strong>Mobile Friendly</strong>
-            <div>Works beautifully across phones, tablets, and desktops.</div>
-          </div>
-        </div>
-      </div>
+      <!-- Hidden form -->
+      <form id="snapshotForm" action="{{ url_for('upload_image') }}" method="POST" enctype="multipart/form-data" style="display:none;">
+        <input type="file" name="file" id="hiddenFileInput">
+      </form>
+    </div>
 
-    </section>
-  </header>
+    <!-- Right: Features -->
+    <div class="features">
+      <div class="feature"><i class="fa-solid fa-gauge-high"></i><div><strong>Fast Detection</strong><div>Get predictions in seconds with a clean, simple workflow.</div></div></div>
+      <div class="feature"><i class="fa-solid fa-brain"></i><div><strong>AI-Powered</strong><div>Deep learning trained on diverse crop images and diseases.</div></div></div>
+      <div class="feature"><i class="fa-solid fa-shield-virus"></i><div><strong>High Confidence</strong><div>Clear scores so you can make decisions with certainty.</div></div></div>
+      <div class="feature"><i class="fa-solid fa-mobile-screen-button"></i><div><strong>Mobile Friendly</strong><div>Works beautifully across phones, tablets, and desktops.</div></div></div>
+    </div>
 
+  </section>
+
+  <script>
+    const openCameraBtn = document.getElementById('openCamera');
+    const captureBtn = document.getElementById('captureBtn');
+    const video = document.getElementById('cameraStream');
+    const previewImg = document.getElementById('previewImg');
+    const imagePreview = document.getElementById('imagePreview');
+    const snapshotForm = document.getElementById('snapshotForm');
+    const hiddenFileInput = document.getElementById('hiddenFileInput');
+    let stream;
+
+    // Open webcam
+    openCameraBtn.addEventListener('click', async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        video.style.display = "block";
+        captureBtn.style.display = "inline-block";
+      } catch (err) {
+        alert("Camera access denied or unavailable.");
+      }
+    });
+
+    // Capture snapshot
+    captureBtn.addEventListener('click', () => {
+      const canvas = document.createElement('canvas');
+      const maxDim = 600; // Resize to max 600px
+      let w = video.videoWidth;
+      let h = video.videoHeight;
+      if (w > h && w > maxDim) {
+        h *= maxDim / w;
+        w = maxDim;
+      } else if (h > w && h > maxDim) {
+        w *= maxDim / h;
+        h = maxDim;
+      }
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, w, h);
+
+      canvas.toBlob(blob => {
+        const file = new File([blob], "snapshot.jpg", { type: "image/jpeg" });
+        previewImg.src = URL.createObjectURL(blob);
+        previewImg.style.display = "block";
+        imagePreview.classList.add('show');
+
+        // stop camera after capture
+        stream.getTracks().forEach(track => track.stop());
+        video.style.display = "none";
+        captureBtn.style.display = "none";
+
+        // attach file to hidden input and auto-submit
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        hiddenFileInput.files = dataTransfer.files;
+        snapshotForm.submit();
+      }, "image/jpeg", 0.7); // 70% quality
+    });
+  </script>
 </body>
 </html>

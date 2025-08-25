@@ -181,21 +181,32 @@
     <div class="card-modern">
       <h1>Crop Disease Detection</h1>
 
-      <form id="uploadForm" action="{{ url_for('upload_image') }}" method="POST" enctype="multipart/form-data">
-        <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
-          <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-          <p class="mb-2">Click or drag to upload your crop image</p>
-          <input type="file" name="image" id="imageUpload" accept="image/*" class="d-none">
-        </div>
+     <form id="uploadForm" action="{{ url_for('upload_image') }}" method="POST" enctype="multipart/form-data">
+  
+  <!-- Upload Area -->
+  <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+    <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+    <p class="mb-2">Click or drag to upload your crop image</p>
+    <input type="file" name="image" id="imageUpload" accept="image/*" class="d-none">
+  </div>
 
-        <div id="imagePreview">
-          <img id="previewImg" alt="Uploaded Image Preview">
-        </div>
+  <!-- Camera Capture Area -->
+  <div class="upload-area" onclick="document.getElementById('cameraCapture').click()">
+    <div class="upload-icon"><i class="fas fa-camera"></i></div>
+    <p class="mb-2">Capture a new photo with camera</p>
+    <input type="file" name="image" id="cameraCapture" accept="image/*" capture="user" class="d-none">
+  </div>
 
-        <button type="submit" class="btn btn-primary">
-          <i class="fas fa-search"></i> Analyze Image
-        </button>
-      </form>
+  <!-- Preview -->
+  <div id="imagePreview">
+    <img id="previewImg" alt="Uploaded Image Preview">
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    <i class="fas fa-search"></i> Analyze Image
+  </button>
+</form>
+
     </div>
 
     <!-- Info Section -->
